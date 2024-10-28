@@ -6,8 +6,11 @@ export class ChatRequest {
 	@IsString()
 	text: string;
 
-	@ApiProperty({ required: false })
-	@IsNumber()
-	@IsOptional()
-	chatId?: number;
+	@ApiProperty({
+		type: "string",
+		format: "binary",
+		isArray: true,
+		required: false,
+	})
+	files: any[];
 }

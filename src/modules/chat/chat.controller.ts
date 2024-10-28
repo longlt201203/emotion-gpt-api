@@ -1,5 +1,10 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { ApiBasicAuth, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import {
+	ApiBasicAuth,
+	ApiBearerAuth,
+	ApiConsumes,
+	ApiTags,
+} from "@nestjs/swagger";
 import { ChatService } from "./chat.service";
 import { ApiResponseDto, SwaggerApiResponse } from "@utils";
 import { ChatRequest, ChatResponse } from "./dto";
@@ -13,8 +18,16 @@ export class ChatController {
 
 	@Post()
 	@SwaggerApiResponse(ChatResponse)
-	async chat(@Body() dto: ChatRequest) {
-		const data = await this.chatService.chat(dto);
+	async create() {
+		const data = await this.chatService.createChat();
+		return new ApiResponseDto(ChatResponse.fromEntity(data), null, "Success!");
+	}
+
+	@Put(":chatId")
+	@SwaggerApiResponse(ChatResponse)
+	@ApiConsumes("multipart/form-data")
+	async chat(@Param("chatId") chatId: string, @Body() dto: ChatRequest) {
+		const data = await this.chatService.chat(+chatId, dto);
 		return new ApiResponseDto(ChatResponse.fromEntity(data), null, "Success!");
 	}
 

@@ -3,7 +3,13 @@ import { AuthService } from "./auth.service";
 import { Response } from "express";
 import { ApiBasicAuth, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { SkipAuth } from "./skip-auth.decorator";
-import { AccountResponse, CreateAccountRequest, ProfileResponse } from "./dto";
+import {
+	AccountResponse,
+	CreateAccountRequest,
+	LoginBasicResponse,
+	LoginUsernamePasswordRequest,
+	ProfileResponse,
+} from "./dto";
 import { ApiResponseDto, SwaggerApiResponse } from "@utils";
 
 @Controller("auth")
@@ -23,6 +29,14 @@ export class AuthController {
 		);
 	}
 
+	@Post("login-basic")
+	@SkipAuth()
+	@SwaggerApiResponse(LoginBasicResponse)
+	async loginBasic(@Body() dto: LoginUsernamePasswordRequest) {
+		const token = await this.authService.issueBasicToken(dto);
+		return new ApiResponseDto({ token }, null, "Success!");
+	}
+
 	@Get("fake-login")
 	@SkipAuth()
 	fakeLogin(@Res() res: Response, @Query("accountId") accountId: string) {
@@ -35,7 +49,7 @@ export class AuthController {
 	@ApiBearerAuth()
 	@SwaggerApiResponse(ProfileResponse)
 	async getProfile() {
-		const data = await this.authService.getProfile();
+		const data = await this.authService.getProfileCls();
 		return new ApiResponseDto(
 			ProfileResponse.fromEntity(data),
 			null,
