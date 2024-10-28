@@ -1,7 +1,7 @@
 import { AccountEntity } from "@db/entities";
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
-import { CreateAccountRequest } from "./dto";
+import { CreateAccountRequest, LoginUsernamePasswordRequest } from "./dto";
 import {
 	AccountAlreadyExistedError,
 	WrongUsernameOrPasswordError,
@@ -45,9 +45,17 @@ export class AuthService {
 		});
 	}
 
-	async getProfile() {
+	async getProfileCls() {
 		const accountId = this.cls.get("authAccount.id");
 		return this.accountsRepoHelper.getProfile(accountId);
+	}
+
+	async issueBasicToken(dto: LoginUsernamePasswordRequest) {
+		await this.loginBasic(dto.username, dto.password);
+		const token = Buffer.from(`${dto.username}:${dto.password}`).toString(
+			"base64",
+		);
+		return token;
 	}
 
 	async loginBasic(username: string, password: string) {

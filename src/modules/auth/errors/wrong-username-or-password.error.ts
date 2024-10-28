@@ -6,6 +6,7 @@ export class WrongUsernameOrPasswordError extends ApiError {
 			code: "wrong_username_or_password_err",
 			message: "Wrong username or password!",
 			detail: null,
+			status: 401,
 		});
 	}
 }

@@ -1,8 +1,23 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { ApiBasicAuth, ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import {
+	Body,
+	Controller,
+	Get,
+	Param,
+	Post,
+	Put,
+	UploadedFiles,
+	UseInterceptors,
+} from "@nestjs/common";
+import {
+	ApiBasicAuth,
+	ApiBearerAuth,
+	ApiConsumes,
+	ApiTags,
+} from "@nestjs/swagger";
 import { ChatService } from "./chat.service";
 import { ApiResponseDto, SwaggerApiResponse } from "@utils";
 import { ChatRequest, ChatResponse } from "./dto";
+import { FilesInterceptor } from "@nestjs/platform-express";
 
 @Controller("chat")
 @ApiTags("chat")
@@ -13,8 +28,21 @@ export class ChatController {
 
 	@Post()
 	@SwaggerApiResponse(ChatResponse)
-	async chat(@Body() dto: ChatRequest) {
-		const data = await this.chatService.chat(dto);
+	async create() {
+		const data = await this.chatService.createChat();
+		return new ApiResponseDto(ChatResponse.fromEntity(data), null, "Success!");
+	}
+
+	@Put(":chatId")
+	@SwaggerApiResponse(ChatResponse)
+	@ApiConsumes("multipart/form-data")
+	@UseInterceptors(FilesInterceptor("files"))
+	async chat(
+		@Param("chatId") chatId: string,
+		@UploadedFiles() files: Express.Multer.File[],
+		@Body() dto: ChatRequest,
+	) {
+		const data = await this.chatService.chat(+chatId, dto);
 		return new ApiResponseDto(ChatResponse.fromEntity(data), null, "Success!");
 	}
 

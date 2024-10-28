@@ -68,13 +68,8 @@ export class ChatService {
 		return chats;
 	}
 
-	async chat(dto: ChatRequest) {
-		let chat: ChatEntity = null;
-		if (dto.chatId) {
-			chat = await this.getOneOrFail(dto.chatId);
-		} else {
-			chat = await this.createChat();
-		}
+	async chat(chatId: number, dto: ChatRequest) {
+		let chat: ChatEntity = await this.getOneOrFail(chatId);
 		const logs = chat.logs as ChatLog[];
 		const result = await this.gptService.chat(dto.text, logs);
 		const message = result.choices[0].message.content;

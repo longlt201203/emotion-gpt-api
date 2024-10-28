@@ -1,13 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsString } from "class-validator";
 
 export class ChatRequest {
 	@ApiProperty()
-	@IsString()
+	// @IsString()
 	text: string;
 
-	@ApiProperty({ required: false })
-	@IsNumber()
-	@IsOptional()
-	chatId?: number;
+	@ApiProperty({
+		type: "string",
+		format: "binary",
+		isArray: true,
+		required: false,
+	})
+	files: any[];
 }
