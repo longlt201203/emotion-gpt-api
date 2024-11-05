@@ -14,6 +14,15 @@ export const Env = {
 	ENABLE_SWAGGER: (process.env.ENABLE_SWAGGER || "false") == "true",
 
 	OPEN_AI_API_KEY: process.env.OPEN_AI_API_KEY || "",
+
+	GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
+	GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
+	GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || "",
+
+	AT_SECRET: process.env.AT_SECRET || "",
+	AT_EXPIRES_IN: process.env.AT_EXPIRES_IN || "",
+	RT_SECRET: process.env.RT_SECRET || "",
+	RT_EXPIRES_IN: process.env.RT_EXPIRES_IN || "",
 } as const;
 
 console.log(Env);

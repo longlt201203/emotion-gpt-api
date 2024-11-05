@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { APP_FILTER, APP_GUARD, APP_PIPE } from "@nestjs/core";
 import {
 	EmotionGptApiClsStore,
@@ -28,9 +26,7 @@ import { ChatModule } from "@modules/chat";
 		AuthModule,
 		ChatModule,
 	],
-	controllers: [AppController],
 	providers: [
-		AppService,
 		{
 			provide: APP_FILTER,
 			useClass: MyExceptionFilter,
