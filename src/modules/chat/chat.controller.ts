@@ -8,6 +8,7 @@ import {
 import { ChatService } from "./chat.service";
 import { ApiResponseDto, SwaggerApiResponse } from "@utils";
 import { ChatRequest, ChatResponse } from "./dto";
+import { FilesInterceptor } from "@nestjs/platform-express";
 
 @Controller("chat")
 @ApiTags("chat")
