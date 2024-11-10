@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Get,
+	Param,
+	Post,
+	Put,
+	UploadedFiles,
+	UseInterceptors,
+} from "@nestjs/common";
 import {
 	ApiBasicAuth,
 	ApiBearerAuth,
@@ -27,12 +36,17 @@ export class ChatController {
 	@Put(":chatId")
 	@SwaggerApiResponse(ChatResponse)
 	@ApiConsumes("multipart/form-data")
-	async chat(@Param("chatId") chatId: string, @Body() dto: ChatRequest) {
+	@UseInterceptors(FilesInterceptor("attactments"))
+	async chat(
+		@Param("chatId") chatId: string,
+		@Body() dto: ChatRequest,
+		@UploadedFiles() attactments: Express.Multer.File[],
+	) {
 		const data = await this.chatService.chat(+chatId, dto);
 		return new ApiResponseDto(ChatResponse.fromEntity(data), null, "Success!");
 	}
 
-	@Get("analyze/:chatId")
+	@Get(":chatId/analyze")
 	async analyze(@Param("chatId") chatId: string) {
 		const data = await this.chatService.analyzeChat(+chatId);
 		return new ApiResponseDto(data, null, "Success!");

@@ -12,5 +12,5 @@ export class ChatRequest {
 		isArray: true,
 		required: false,
 	})
-	files: any[];
+	attactments: any[];
 }
